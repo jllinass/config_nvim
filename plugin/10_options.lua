@@ -22,7 +22,7 @@
 -- General ====================================================================
 vim.g.mapleader = ' ' -- Use `<Space>` as <Leader> key
 
-vim.o.clipboard   = 'unnamedplus'  -- Use system clipboard
+vim.opt.clipboard   = 'unnamedplus'  -- Use system clipboard
 vim.o.mouse       = 'a'            -- Enable mouse
 vim.o.mousescroll = 'ver:25,hor:6' -- Customize mouse scroll
 vim.o.switchbuf   = 'usetab'       -- Use already opened buffers when switching
@@ -76,7 +76,6 @@ vim.o.smartcase     = true    -- Respect case if search pattern has upper case
 vim.o.smartindent   = true    -- Make indenting smart
 vim.o.spelloptions  = 'camel' -- Treat camelCase word parts as separate words
 vim.o.tabstop       = 2       -- Show tab as this number of spaces
-vim.o.virtualedit   = 'block' -- Allow going past end of line in blockwise mode
 
 vim.o.iskeyword = '@,48-57,_,192-255,-' -- Treat dash as `word` textobject part
 

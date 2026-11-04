@@ -218,7 +218,6 @@ later(function() add({ 'https://github.com/rafamadriz/friendly-snippets' }) end)
 
 -- AI Completion =============================================================
 
--- Supermaven fast AI code completion
 later(function()
   add({ 'https://github.com/supermaven-inc/supermaven-nvim' })
 
@@ -228,6 +227,13 @@ later(function()
       clear_suggestion = '<C-]>',
       accept_word = '<C-j>',
     },
+    ignore_filetypes = { cpp = true },
+    color = {
+      suggestion_color = '#ffffff',
+      cterm = 244,
+    },
+    disable_inline_completion = false,
+    disable_keymaps = false,
   })
 end)
 
@@ -245,19 +251,35 @@ Config.now(function()
   require('rose-pine').setup({})
   require('monokai-pro').setup({})
   require('gruvbox').setup({})
-  require('solarized-osaka').setup({
-    transparent = true,
-    terminal_colors = true,
-    styles = {
-      comments = { italic = true },
-      keywords = { italic = true },
-      functions = {},
-      variables = {},
-      sidebars = 'dark',
-      floats = 'dark',
-    },
-  })
+  require('solarized-osaka').setup({})
 
   -- Default colorscheme on startup
-  vim.cmd('colorscheme gruvbox')
+  vim.cmd('colorscheme solarized-osaka')
+
+  vim.g.transparent_enabled = false
+
+  local function toggle_transparency()
+    local groups = {
+      'Normal', 'NormalNC', 'Comment', 'Constant', 'Special',
+      'Identifier', 'Statement', 'PreProc', 'Type', 'Underlined',
+      'Todo', 'String', 'Function', 'Variable', 'NormalFloat',
+      'FloatBorder', 'SignColumn', 'LineNr', 'CursorLineNr'
+    }
+
+    if vim.g.transparent_enabled then
+      vim.cmd('colorscheme ' .. vim.g.colors_name)
+      vim.g.transparent_enabled = false
+      print('Transparencia: DESACTIVADA')
+    else
+      for _, group in ipairs(groups) do
+        vim.api.nvim_set_hl(0, group, { bg = 'NONE', ctermbg = 'NONE' })
+      end
+      vim.g.transparent_enabled = true
+      print('Transparencia: ACTIVADA')
+    end
+  end
+
+  vim.api.nvim_create_user_command('ToggleTransparency', toggle_transparency, {})
+
+  vim.keymap.set('n', '<leader>ty', toggle_transparency, { desc = 'Toggle Transparencia' })
 end)
