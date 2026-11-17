@@ -45,6 +45,7 @@ now_if_args(function()
   add({
     'https://github.com/nvim-treesitter/nvim-treesitter',
     'https://github.com/nvim-treesitter/nvim-treesitter-textobjects',
+    'https://github.com/windwp/nvim-ts-autotag',
   })
 
   -- Define languages which will have parsers installed and auto enabled
@@ -92,6 +93,15 @@ now_if_args(function()
   end
   local ts_start = function(ev) vim.treesitter.start(ev.buf) end
   Config.new_autocmd('FileType', filetypes, ts_start, 'Start tree-sitter')
+
+  -- Auto close tags
+  require('nvim-ts-autotag').setup({
+    opts = {
+      enable_close = true,
+      enable_rename = true,
+      enable_close_on_slash = true,
+    },
+  })
 end)
 
 -- Language servers ===========================================================
@@ -219,22 +229,19 @@ later(function() add({ 'https://github.com/rafamadriz/friendly-snippets' }) end)
 -- AI Completion =============================================================
 
 later(function()
-  add({ 'https://github.com/supermaven-inc/supermaven-nvim' })
+  vim.g.codeium_disable_bindings = 1
+  add({ 'https://github.com/Exafunction/codeium.vim' })
 
-  require('supermaven-nvim').setup({
-    keymaps = {
-      accept_suggestion = '<Tab>',
-      clear_suggestion = '<C-]>',
-      accept_word = '<C-j>',
-    },
-    ignore_filetypes = { cpp = true },
-    color = {
-      suggestion_color = '#ffffff',
-      cterm = 244,
-    },
-    disable_inline_completion = false,
-    disable_keymaps = false,
-  })
+  vim.keymap.set('i', '<Tab>', function()
+    if vim.fn.pumvisible() == 1 then return '<C-n>' end
+    return vim.fn['codeium#Accept']()
+  end, { expr = true, silent = true })
+  vim.keymap.set('i', '<M-Bslash>', function()
+    vim.fn['codeium#Complete']()
+  end, { desc = 'Request Codeium completion', silent = true })
+  vim.keymap.set('i', '<C-]>', function() vim.fn['codeium#Clear']() end, { silent = true })
+
+  vim.fn['codeium#command#StartLanguageServer']()
 end)
 
 -- Color scheme ===============================================================

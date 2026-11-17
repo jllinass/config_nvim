@@ -18,6 +18,7 @@ end
 -- Usage: `yiw` to yank a word and `]p` to put it on the next line.
 nmap('[p', '<Cmd>exe "iput! " . v:register<CR>', 'Paste Above')
 nmap(']p', '<Cmd>exe "iput "  . v:register<CR>', 'Paste Below')
+nmap('<S-Tab>', '<Cmd>bnext<CR>', 'Next Buffer')
 
 -- Select all
 vim.keymap.set('n', '<leader>a', 'ggVG')
@@ -95,6 +96,7 @@ end
 nmap_leader('ba', '<Cmd>b#<CR>',                               'Alternate')
 nmap_leader('bd', '<Cmd>lua MiniBufremove.delete()<CR>',          'Delete')
 nmap_leader('bD', '<Cmd>lua MiniBufremove.delete(0, true)<CR>',  'Delete!')
+nmap_leader('bp', '<Cmd>bprevious<CR>',                       'Previous Buffer')
 nmap_leader('bs', new_scratch_buffer,                            'Scratch')
 nmap_leader('bw', '<Cmd>lua MiniBufremove.wipeout()<CR>',        'Wipeout')
 nmap_leader('bW', '<Cmd>lua MiniBufremove.wipeout(0, true)<CR>', 'Wipeout!')
